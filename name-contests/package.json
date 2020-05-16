@@ -1,0 +1,45 @@
+{
+  "name": "name-contests-api",
+  "version": "1.0.0",
+  "description": "Name contests API",
+  "author": "Nick Vanden Eynde",
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "clean": "rm -rf ./dist",
+    "compile": "tsc -b tsconfig.json",
+    "start": "node --trace-warnings --max-old-space-size=8192 dist/src/index.js",
+    "dev": "ts-node-dev --ignore-watch node_modules --trace-warnings --respawn --transpileOnly --inspect=0.0.0.0:9222 --max-old-space-size=8192 src/index.ts",
+    "lint": "eslint '*/**/*.{js,ts}' --fix",
+    "lint:check": "eslint '*/**/*.{js,ts}'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reactjscamp/name-contests.git"
+  },
+  "keywords": [
+    "graphql"
+  ],
+  "bugs": {
+    "url": "https://github.com/reactjscamp/name-contests/issues"
+  },
+  "homepage": "https://github.com/reactjscamp/name-contests#readme",
+  "dependencies": {
+    "graphql": "^15.0.0",
+    "mongodb": "^2.1.18",
+    "pg": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.19.0",
+    "@typescript-eslint/parser": "^2.19.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "import-sort-style-eslint": "^6.0.0",
+    "prettier": "^2.0.3",
+    "ts-node": "^8.8.2",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.9.2",
+    "yarn": "^1.22.4"
+  }
+}
