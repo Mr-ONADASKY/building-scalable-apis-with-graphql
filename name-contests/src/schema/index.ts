@@ -1,5 +1,6 @@
 import { GraphQLSchema, GraphQLObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
 import { MeType } from './types/me';
+import pgdb from '../database/pgdb';
 
 export const RootQueryType = new GraphQLObjectType({
   name: 'RootQueryType',
@@ -11,8 +12,8 @@ export const RootQueryType = new GraphQLObjectType({
       args: {
         key: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve: () => {
-        return { id: 42, email: 'example@example.com' };
+      resolve: (obj, args, { pgPool }) => {
+        return pgdb(pgPool).getUser(args.key);
       },
     },
   },
