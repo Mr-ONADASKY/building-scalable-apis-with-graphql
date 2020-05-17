@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+import { camelizeKeys } from 'humps';
 
 export default (pgPool: Pool) => {
   return {
@@ -10,7 +11,7 @@ export default (pgPool: Pool) => {
         [apiKey],
       );
 
-      return response.rows[0];
+      return camelizeKeys(response.rows[0]);
     },
   };
 };
