@@ -13,5 +13,15 @@ export default (pgPool: Pool) => {
 
       return camelizeKeys(response.rows[0]);
     },
+    async getContests(user) {
+      const response = await pgPool.query(
+        `
+      select * from contests
+      where created_by = $1`,
+        [user.id],
+      );
+
+      return camelizeKeys(response.rows);
+    },
   };
 };
