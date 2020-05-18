@@ -1,9 +1,13 @@
 import { Db } from 'mongodb';
+import { orderedFor } from '../util';
 
 export default (mPool: Db) => ({
-  getCounts: async (user, countsField: string) => {
-    const response = await mPool.collection('users').findOne({ userId: user.id });
+  getUsersByIds: async (userIds: string[]) => {
+    const rows = await mPool
+      .collection('users')
+      .find({ userId: { $in: userIds } })
+      .toArray();
 
-    return response[countsField];
+    return orderedFor(rows, userIds, 'userId', true);
   },
 });

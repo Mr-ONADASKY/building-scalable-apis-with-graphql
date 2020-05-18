@@ -1,6 +1,5 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull, GraphQLList, GraphQLInt } from 'graphql';
 import { ContestType } from './contest';
-import mdb from '../../database/mdb';
 
 export const UserType = new GraphQLObjectType({
   name: 'UserType',
@@ -17,15 +16,18 @@ export const UserType = new GraphQLObjectType({
     },
     contestsCount: {
       type: GraphQLInt,
-      resolve: (obj, args, { mPool }, { fieldName }) => mdb(mPool).getCounts(obj, fieldName),
+      resolve: (obj, args, { loaders }, { fieldName }) =>
+        loaders.mdb.usersByIds.load(obj.id).then(res => res[fieldName]),
     },
     namesCount: {
       type: GraphQLInt,
-      resolve: (obj, args, { mPool }, { fieldName }) => mdb(mPool).getCounts(obj, fieldName),
+      resolve: (obj, args, { loaders }, { fieldName }) =>
+        loaders.mdb.usersByIds.load(obj.id).then(res => res[fieldName]),
     },
     votesCount: {
       type: GraphQLInt,
-      resolve: (obj, args, { mPool }, { fieldName }) => mdb(mPool).getCounts(obj, fieldName),
+      resolve: (obj, args, { loaders }, { fieldName }) =>
+        loaders.mdb.usersByIds.load(obj.id).then(res => res[fieldName]),
     },
   },
 });

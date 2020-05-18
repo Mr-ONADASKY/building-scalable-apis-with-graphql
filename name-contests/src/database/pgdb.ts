@@ -1,21 +1,7 @@
 import { Pool } from 'pg';
-import { camelizeKeys } from 'humps';
-import groupBy from 'lodash.groupby';
+import { orderedFor } from '../util';
 
 export default (pgPool: Pool) => {
-  const orderedFor = (rows: any[], collection: string[], field: string, singleObject: boolean) => {
-    const data = camelizeKeys(rows);
-    const inGroupsOfField = groupBy(data, field);
-    return collection.map(element => {
-      const elementArray = inGroupsOfField[element];
-      if (elementArray) {
-        return singleObject ? elementArray[0] : elementArray;
-      }
-
-      return singleObject ? {} : [];
-    });
-  };
-
   return {
     async getUsersByIds(userIds: string[]) {
       const response = await pgPool.query(
