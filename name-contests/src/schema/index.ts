@@ -1,5 +1,5 @@
 import { GraphQLSchema, GraphQLObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
-import { MeType } from './types/me';
+import { UserType } from './types/user';
 import pgdb from '../database/pgdb';
 
 export const RootQueryType = new GraphQLObjectType({
@@ -7,13 +7,13 @@ export const RootQueryType = new GraphQLObjectType({
 
   fields: {
     me: {
-      type: MeType,
+      type: UserType,
       description: 'The current user identified by an api key',
       args: {
         key: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: (obj, args, { pgPool }) => {
-        return pgdb(pgPool).getUser(args.key);
+        return pgdb(pgPool).getUserByApiKey(args.key);
       },
     },
   },

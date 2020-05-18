@@ -1,7 +1,9 @@
-import { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
+import { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
 import ContestStatusType from './contest-status';
+import { NameType } from './name';
+import pgdb from '../../database/pgdb';
 
-export default new GraphQLObjectType({
+export const ContestType = new GraphQLObjectType({
   name: 'ContestType',
   fields: {
     id: { type: GraphQLID },
@@ -10,5 +12,9 @@ export default new GraphQLObjectType({
     description: { type: GraphQLString },
     status: { type: new GraphQLNonNull(ContestStatusType) },
     createdAt: { type: new GraphQLNonNull(GraphQLString) },
+    names: {
+      type: new GraphQLList(NameType),
+      resolve: (obj, args, { pgPool }) => pgdb(pgPool).getNames(obj),
+    },
   },
 });

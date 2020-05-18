@@ -1,10 +1,10 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull, GraphQLList, GraphQLInt } from 'graphql';
-import ContestType from './contest';
+import { ContestType } from './contest';
 import pgdb from '../../database/pgdb';
 import mdb from '../../database/mdb';
 
-export const MeType = new GraphQLObjectType({
-  name: 'MeType',
+export const UserType = new GraphQLObjectType({
+  name: 'UserType',
   fields: {
     id: { type: GraphQLID },
     firstName: { type: GraphQLString },

@@ -3,7 +3,17 @@ import { camelizeKeys } from 'humps';
 
 export default (pgPool: Pool) => {
   return {
-    async getUser(apiKey: string) {
+    async getUserById(userId: string) {
+      const response = await pgPool.query(
+        `
+            select * from users
+            where id = $1`,
+        [userId],
+      );
+
+      return camelizeKeys(response.rows[0]);
+    },
+    async getUserByApiKey(apiKey: string) {
       const response = await pgPool.query(
         `
             select * from users
@@ -19,6 +29,16 @@ export default (pgPool: Pool) => {
       select * from contests
       where created_by = $1`,
         [user.id],
+      );
+
+      return camelizeKeys(response.rows);
+    },
+    async getNames(contest) {
+      const response = await pgPool.query(
+        `
+      select * from names
+      where contest_id = $1`,
+        [contest.id],
       );
 
       return camelizeKeys(response.rows);
