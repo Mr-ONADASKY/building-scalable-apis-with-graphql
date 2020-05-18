@@ -1,6 +1,5 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull, GraphQLList, GraphQLInt } from 'graphql';
 import { ContestType } from './contest';
-import pgdb from '../../database/pgdb';
 import mdb from '../../database/mdb';
 
 export const UserType = new GraphQLObjectType({
@@ -14,7 +13,7 @@ export const UserType = new GraphQLObjectType({
     createdAt: { type: GraphQLString },
     contests: {
       type: new GraphQLList(ContestType),
-      resolve: (obj, args, { pgPool }) => pgdb(pgPool).getContests(obj),
+      resolve: (obj, args, { loaders }) => loaders.contestsForUserIds.load(obj.id),
     },
     contestsCount: {
       type: GraphQLInt,

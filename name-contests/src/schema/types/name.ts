@@ -1,6 +1,5 @@
 import { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
 import { UserType } from './user';
-import pgdb from '../../database/pgdb';
 
 export const NameType = new GraphQLObjectType({
   name: 'Name',
@@ -11,7 +10,7 @@ export const NameType = new GraphQLObjectType({
     createdAt: { type: new GraphQLNonNull(GraphQLString) },
     createdBy: {
       type: new GraphQLNonNull(UserType),
-      resolve: (obj, args, { pgPool }) => pgdb(pgPool).getUserById(obj.createdBy),
+      resolve: (obj, args, { loaders }) => loaders.usersByIds.load(obj.createdBy),
     },
   }),
 });

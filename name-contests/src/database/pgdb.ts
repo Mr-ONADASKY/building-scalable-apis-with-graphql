@@ -1,47 +1,61 @@
 import { Pool } from 'pg';
 import { camelizeKeys } from 'humps';
+import groupBy from 'lodash.groupby';
 
 export default (pgPool: Pool) => {
+  const orderedFor = (rows: any[], collection: string[], field: string, singleObject: boolean) => {
+    const data = camelizeKeys(rows);
+    const inGroupsOfField = groupBy(data, field);
+    return collection.map(element => {
+      const elementArray = inGroupsOfField[element];
+      if (elementArray) {
+        return singleObject ? elementArray[0] : elementArray;
+      }
+
+      return singleObject ? {} : [];
+    });
+  };
+
   return {
-    async getUserById(userId: string) {
+    async getUsersByIds(userIds: string[]) {
       const response = await pgPool.query(
         `
             select * from users
-            where id = $1`,
-        [userId],
+            where id = ANY($1)`,
+        [userIds],
       );
 
-      return camelizeKeys(response.rows[0]);
+      return orderedFor(response.rows, userIds, 'id', true);
     },
-    async getUserByApiKey(apiKey: string) {
+    async getUsersByApiKeys(apiKeys: string[]) {
       const response = await pgPool.query(
         `
             select * from users
-            where api_key = $1`,
-        [apiKey],
+            where api_key = ANY($1)`,
+        [apiKeys],
       );
 
-      return camelizeKeys(response.rows[0]);
+      return orderedFor(response.rows, apiKeys, 'apiKey', true);
     },
-    async getContests(user) {
+    async getContestsForUserIds(userIds: string[]) {
       const response = await pgPool.query(
         `
       select * from contests
-      where created_by = $1`,
-        [user.id],
+      where created_by = ANY($1)`,
+        [userIds],
       );
 
-      return camelizeKeys(response.rows);
+      return orderedFor(response.rows, userIds, 'createdBy', false);
     },
-    async getNames(contest) {
+    async getNamesForContestIds(contestIds: string[]) {
       const response = await pgPool.query(
         `
       select * from names
-      where contest_id = $1`,
-        [contest.id],
+      where contest_id = ANY($1)`,
+        [contestIds],
       );
 
-      return camelizeKeys(response.rows);
+      return orderedFor(response.rows, contestIds, 'contestId', false);
     },
   };
 };
