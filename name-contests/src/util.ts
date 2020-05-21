@@ -14,6 +14,8 @@ export const orderedFor = (rows: any[], collection: string[], field: string, sin
   });
 };
 
+export const slug = (str: string) => str.toLowerCase().replace(/[\s\W-]+/, '-');
+
 export default {
   nodeEnv: process.env.NODE_ENV || 'development',
 };

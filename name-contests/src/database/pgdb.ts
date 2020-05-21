@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { orderedFor } from '../util';
+import { orderedFor, slug } from '../util';
 
 export default (pgPool: Pool) => {
   return {
@@ -53,6 +53,19 @@ export default (pgPool: Pool) => {
       );
 
       return orderedFor(response.rows, nameIds, 'nameId', true);
+    },
+    async addNewContest({ apiKey, title, description }) {
+      console.log(apiKey);
+      const response = pgPool.query(
+        `
+      insert into contests(code, title, description, created_by) 
+      values ($1, $2, $3,
+         (select id from users where api_key = $4))
+        returning *`,
+        [slug(title), title, description, apiKey],
+      );
+
+      return (await response).rows;
     },
   };
 };
