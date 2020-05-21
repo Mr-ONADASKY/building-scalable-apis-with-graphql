@@ -1,5 +1,6 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull, GraphQLList, GraphQLInt } from 'graphql';
 import { ContestType } from './contest';
+import { ActivityType } from './activity';
 
 export const UserType = new GraphQLObjectType({
   name: 'UserType',
@@ -28,6 +29,10 @@ export const UserType = new GraphQLObjectType({
       type: GraphQLInt,
       resolve: (obj, args, { loaders }, { fieldName }) =>
         loaders.mdb.usersByIds.load(obj.id).then(res => res[fieldName]),
+    },
+    activities: {
+      type: new GraphQLList(ActivityType),
+      resolve: (obj, args, { loaders }) => loaders.activitiesForUserIds.load(obj.id),
     },
   },
 });

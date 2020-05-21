@@ -55,7 +55,6 @@ export default (pgPool: Pool) => {
       return orderedFor(response.rows, nameIds, 'nameId', true);
     },
     async addNewContest({ apiKey, title, description }) {
-      console.log(apiKey);
       const response = pgPool.query(
         `
       insert into contests(code, title, description, created_by) 
@@ -66,6 +65,24 @@ export default (pgPool: Pool) => {
       );
 
       return (await response).rows;
+    },
+    async getActivitiesForUserIds(userIds: string[]) {
+      const response = await pgPool.query(
+        `
+      select created_by, created_at, label, '' as title,
+          'name' as activity_type
+      from names
+      where created_by = ANY($1)
+      union
+      select created_by, created_at, '' as label, title,
+          'contest' as activity_type
+      from contests
+      where created_by = ANY($1)
+      `,
+        [userIds],
+      );
+
+      return orderedFor(response.rows, userIds, 'createdBy', false);
     },
   };
 };

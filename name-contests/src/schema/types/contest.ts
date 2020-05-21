@@ -3,7 +3,7 @@ import ContestStatusType from './contest-status';
 import { NameType } from './name';
 
 export const ContestType = new GraphQLObjectType({
-  name: 'ContestType',
+  name: 'Contest',
   fields: {
     id: { type: GraphQLID },
     code: { type: new GraphQLNonNull(GraphQLString) },

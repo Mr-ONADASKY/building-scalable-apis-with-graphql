@@ -26,6 +26,7 @@ const init = async () => {
       namesForContestIds: new DataLoader(_pgdb.getNamesForContestIds),
       contestsForUserIds: new DataLoader(_pgdb.getContestsForUserIds),
       totalVotesByNameIds: new DataLoader(_pgdb.getTotalVotesByNameIds),
+      activitiesForUserIds: new DataLoader(_pgdb.getActivitiesForUserIds),
       mdb: {
         usersByIds: new DataLoader(_mdb.getUsersByIds),
       },
