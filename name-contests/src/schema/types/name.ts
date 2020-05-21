@@ -1,5 +1,6 @@
 import { GraphQLObjectType, GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
 import { UserType } from './user';
+import TotalVotes from './total-votes';
 
 export const NameType = new GraphQLObjectType({
   name: 'Name',
@@ -11,6 +12,10 @@ export const NameType = new GraphQLObjectType({
     createdBy: {
       type: new GraphQLNonNull(UserType),
       resolve: (obj, args, { loaders }) => loaders.usersByIds.load(obj.createdBy),
+    },
+    totalVotes: {
+      type: TotalVotes,
+      resolve: (obj, args, { loaders }) => loaders.totalVotesByNameIds.load(obj.id),
     },
   }),
 });

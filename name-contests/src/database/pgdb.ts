@@ -43,5 +43,16 @@ export default (pgPool: Pool) => {
 
       return orderedFor(response.rows, contestIds, 'contestId', false);
     },
+    async getTotalVotesByNameIds(nameIds: string[]) {
+      const response = await pgPool.query(
+        `
+      select name_id, up, down from total_votes_by_name
+      where name_id = ANY($1)
+      `,
+        [nameIds],
+      );
+
+      return orderedFor(response.rows, nameIds, 'nameId', true);
+    },
   };
 };
